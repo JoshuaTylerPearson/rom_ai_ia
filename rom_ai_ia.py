@@ -1,56 +1,72 @@
-graph = {'A': set(['S140', 'Z75', 'T118']),
-         'Z': set(['A75', 'O71']),
-         'O': set(['Z71', 'S151']),
-         'T': set(['A118', 'L111']),
-         'L': set(['T111', 'M70']),
-         'M': set(['L70', 'D75']),
-         'D': set(['M75', 'C120']),
-         'S': set(['F99', 'R80', 'A140']),
-         'R': set(['S80', 'P97', 'C146']),
-         'C': set(['R146', 'P138', 'D120']),
-         'P': set(['R97', 'C138', 'B101']),
-         'F': set(['S99', 'B211']),
-         'G': set(['B90']),
-         'B': set(['F211', 'P101', 'G90', 'U85']),
-         'U': set(['B85', 'H98', 'V142']),
-         'H': set(['U98', 'E86']),
-         'E': set(['H86']),
-         'V': set(['U142', 'I92']),
-         'I': set(['V92', 'N87']),
-         'N': set(['I87'])}
+graph = {'A': set(['140S', '75Z', '118T']),
+         'Z': set(['75A', '71O']),
+         'O': set(['71Z', '151S']),
+         'T': set(['118A', '111L']),
+         'L': set(['111T', '70M']),
+         'M': set(['70L', '75D']),
+         'D': set(['75M', '120C']),
+         'S': set(['99F', '80R', '140A']),
+         'R': set(['80S', '97P', '146C']),
+         'C': set(['146R', '138P', '120D']),
+         'P': set(['97R', '138C', '101B']),
+         'F': set(['99S', '211B']),
+         'G': set(['90B']),
+         'B': set(['211F', '101P', '90G', '85U']),
+         'U': set(['85B', '98H', '142V']),
+         'H': set(['98U', '86E']),
+         'E': set(['86H']),
+         'V': set(['142U', '92I']),
+         'I': set(['92V', '87N']),
+         'N': set(['87I'])}
 
-def bfs_paths(graph, start, goal):
+def bfs_path(graph, start, goal):
     queue = [(start, [start])]
     while queue:
         (vertex, path) = queue.pop(0)
+        print(vertex)
         for next in graph[vertex] - set(path):
-            if next[:1] == goal:
-                yield path + [next[:1]]
+            if next[-1:] == goal:
+                yield path + [next[-1:]]
             else:
-                queue.append((next[:1], path + [next[:1]]))
+                queue.append((next[-1:], path + [next[-1:]]))
 
-def shortest_path(graph, start, goal):
+def uniform_cost(graph, start, goal):
+    
+    frontier = [(0, [start])]
+
+    print(frontier)
+    
+    while frontier:
+        cost, path = frontier.pop()
+ 
+        if path[-1] == goal:
+            return str(path) + ": " + str(cost)
+ 
+        for n_path in graph[path[-1]] - set(path):
+            
+            frontier.append((int(n_path[:-1]) + int(cost) , path + [n_path[-1:]]))
+ 
+        frontier.sort(reverse=True)
+
+def shortest_path_bfs(graph, start, goal):
     try:
-        return next(bfs_paths(graph, start, goal))
+        return next(bfs_path(graph, start, goal))
     except StopIteration:
         return None
-
-#def a_star(graph, start, goal):
-    
 
 srt = input('Starting city: ')
 
 srt = srt.upper()[:1]
-if not srt:
-    while not srt:
+if not srt or srt.isdigit():
+    while not srt or srt.isdigit():
         srt = input('Starting city: ')
         srt = srt.upper()[:1]
 
 end = input('Ending city: ')
 
 end = end.upper()[:1]
-if not end:
-    while not end:
+if not end or end.isdigit():
+    while not end or end.isdigit():
         end = input('Ending city: ')
         end = end.upper()[:1]
 
@@ -62,8 +78,8 @@ if not slct or not slct.isdigit():
 slct = int(slct)
 
 if slct == 0:
-	print("shortest path: " + str(shortest_path(graph, srt, end)))
+	print("shortest path: " + str(shortest_path_bfs(graph, srt, end)))
 elif slct == 1:
-	print("not currently supported")
+	print("shortest path: " + str(uniform_cost(graph, srt, end)))
 else:
 	print("not currently supported")
