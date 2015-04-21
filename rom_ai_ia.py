@@ -29,33 +29,24 @@ def bfs_path(graph, start, goal):
                 yield path + [next[-1:]]
             else:
                 queue.append((next[-1:], path + [next[-1:]]))
-
-def uniform_cost(graph, start, goal):
-    
-    frontier = [(0, [start])]
-
-    print(frontier)
-    
-    while frontier:
-        cost, path = frontier.pop()
- 
-        if path[-1] == goal:
-            return str(path) + ": " + str(cost)
- 
-        for n_path in graph[path[-1]] - set(path):
-            
-            frontier.append((int(n_path[:-1]) + int(cost) , path + [n_path[-1:]]))
- 
-        frontier.sort(reverse=True)
-
+                
 def shortest_path_bfs(graph, start, goal):
     try:
         return next(bfs_path(graph, start, goal))
     except StopIteration:
         return None
 
-srt = input('Starting city: ')
+def uniform_cost(graph, start, goal):
+    frontier = [(0, [start])]
+    while frontier:
+        cost, path = frontier.pop()
+        if path[-1] == goal:
+            return str(path) + ": " + str(cost)
+        for n_path in graph[path[-1]] - set(path):
+            frontier.append((int(n_path[:-1]) + int(cost) , path + [n_path[-1:]]))
+        frontier.sort(reverse=True)
 
+srt = input('Starting city: ')
 srt = srt.upper()[:1]
 if not srt or srt.isdigit():
     while not srt or srt.isdigit():
@@ -63,23 +54,22 @@ if not srt or srt.isdigit():
         srt = srt.upper()[:1]
 
 end = input('Ending city: ')
-
 end = end.upper()[:1]
 if not end or end.isdigit():
     while not end or end.isdigit():
-        end = input('Ending city: ')
+        end = ('Ending city: ')
         end = end.upper()[:1]
 
 slct = input('0: breadth first\n1: uniform cost\n')
 if not slct or not slct.isdigit():
     while not slct or not slct.isdigit():
         slct = input('0: breadth first\n1: uniform cost\n')
-
+        
 slct = int(slct)
-
 if slct == 0:
 	print("shortest path: " + str(shortest_path_bfs(graph, srt, end)))
 elif slct == 1:
 	print("shortest path: " + str(uniform_cost(graph, srt, end)))
 else:
 	print("not currently supported")
+input()
