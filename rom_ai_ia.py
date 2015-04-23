@@ -1,3 +1,7 @@
+#	rom_ai_ia version 1.1 
+#	by Joshua Pearson
+#	last change 2015-04-25
+
 graph = {'A': set(['140S', '75Z', '118T']),
          'Z': set(['75A', '71O']),
          'O': set(['71Z', '151S']),
@@ -23,7 +27,6 @@ def bfs_path(graph, start, goal):
     queue = [(start, [start])]
     while queue:
         (vertex, path) = queue.pop(0)
-        print(vertex)
         for next in graph[vertex] - set(path):
             if next[-1:] == goal:
                 yield path + [next[-1:]]
