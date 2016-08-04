@@ -62,7 +62,7 @@ end = input('Ending city: ')
 end = end.upper()[:1]
 if not end or end.isdigit():
     while not end or end.isdigit():
-        end = ('Ending city: ')
+        end = input('Ending city: ')
         end = end.upper()[:1]
 
 slct = input('0: breadth first\n1: uniform cost\n')
